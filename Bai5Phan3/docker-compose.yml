@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+
+  vote:
+    build: ./vote
+    ports:
+      - "5000:80"
+    depends_on:
+      - redis
+
+  result:
+    build: ./result
+    ports:
+      - "5001:80"
+    depends_on:
+      - db
+
+  redis:
+    image: redis:alpine
+
+  worker:
+    build: ./worker
+    depends_on:
+      - redis
+      - db
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: votes
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
