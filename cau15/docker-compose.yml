@@ -1,0 +1,13 @@
+version: '3.7'  # dùng 3.7 trở lên để hỗ trợ giới hạn tài nguyên
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis-limited
+    ports:
+      - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'        # Giới hạn dùng tối đa 50% CPU
+          memory: 200M       # Giới hạn dùng tối đa 200MB RAM
